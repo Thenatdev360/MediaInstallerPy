@@ -1,70 +1,47 @@
 @echo off
-title MediaInstaller Dependencies
-cd /d %~dp0
+title MediaInstaller - Installing dependencies
+echo ===============================
+echo   MediaInstaller Installer
+echo ===============================
 
-echo ==========================
-echo MediaInstaller Setup
-echo ==========================
+REM ================= PYTHON =================
 
-REM ---------------------------
-REM PYTHON
-REM ---------------------------
-
-python --version >nul 2>&1
-
-if errorlevel 1 (
-    echo Python not found. Installing...
-
-    curl -L -o python.exe https://www.python.org/ftp/python/3.13.2/python-3.13.2-amd64.exe
-
-    python.exe /quiet InstallAllUsers=1 PrependPath=1
-
+where python >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Installing Python...
+    curl -L https://www.python.org/ftp/python/3.13.1/python-3.13.1-amd64.exe -o python.exe
+    start /wait python.exe /quiet InstallAllUsers=1 PrependPath=1
     del python.exe
-
-    echo Python installed.
 ) else (
-    echo Python already installed.
+    echo Python already installed
 )
 
-REM ---------------------------
-REM MEDIA FOLDER
-REM ---------------------------
+REM ================= NODE =================
 
-if not exist media mkdir media
+where node >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Installing Node.js...
+    curl -L https://nodejs.org/dist/v22.11.0/node-v22.11.0-x64.msi -o node.msi
+    start /wait node.msi /quiet
+    del node.msi
+) else (
+    echo Node already installed
+)
 
-REM ---------------------------
-REM yt-dlp
-REM ---------------------------
+REM ================= YT-DLP =================
 
 if not exist yt-dlp.exe (
     echo Downloading yt-dlp...
-    curl -L -o yt-dlp.exe https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe
+    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe -o yt-dlp.exe
+) else (
+    echo yt-dlp already exists
 )
 
-REM ---------------------------
-REM ffmpeg
-REM ---------------------------
+REM ================= MEDIA FOLDER =================
 
-if not exist ffmpeg (
-    echo Downloading ffmpeg...
-
-    mkdir ffmpeg
-    cd ffmpeg
-
-    curl -L -o ffmpeg.zip https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
-    tar -xf ffmpeg.zip
-
-    cd ..
-)
-
-REM ---------------------------
-REM PATH
-REM ---------------------------
-
-setx PATH "%cd%;%cd%\ffmpeg\ffmpeg-*-essentials_build\bin;%PATH%"
+if not exist media mkdir media
 
 echo.
-echo ==========================
+echo ===============================
 echo DONE. Restart terminal.
-echo ==========================
 pause

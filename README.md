@@ -39,6 +39,9 @@ Linux & Termux (Android):
     chmod +x dependencies.sh
     ./dependencies.sh
 
+if not work you use(android):
+    bash dependencies.sh
+
 > Note: Termux users: The Linux `.sh` script is fully compatible with Termux on Android.
 
 Step 3: Run Media Installer

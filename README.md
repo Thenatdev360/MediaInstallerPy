@@ -40,6 +40,7 @@ Linux & Termux (Android):
     ./dependencies.sh
 
 if not work you use(android):
+
     bash dependencies.sh
 
 > Note: Termux users: The Linux `.sh` script is fully compatible with Termux on Android.
